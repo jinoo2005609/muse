@@ -32,7 +32,7 @@ const getQueueInfo = (player: Player) => {
     return '-';
   }
 
-  return queueSize === 1 ? '1 song' : `${queueSize} songs`;
+  return queueSize === 1 ? '1 곡' : `${queueSize} 곡`;
 };
 
 const getPlayerUI = (player: Player) => {
@@ -54,7 +54,7 @@ export const buildPlayingMessageEmbed = (player: Player): EmbedBuilder => {
   const currentlyPlaying = player.getCurrent();
 
   if (!currentlyPlaying) {
-    throw new Error('No playing song found');
+    throw new Error('재생 중인 곡이 없어요.');
   }
 
   const {artist, thumbnailUrl, requestedBy} = currentlyPlaying;
@@ -64,10 +64,10 @@ export const buildPlayingMessageEmbed = (player: Player): EmbedBuilder => {
     .setTitle(player.status === STATUS.PLAYING ? 'Now Playing' : 'Paused')
     .setDescription(`
       **${getSongTitle(currentlyPlaying)}**
-      Requested by: <@${requestedBy}>\n
+      요청한 사람: <@${requestedBy}>\n
       ${getPlayerUI(player)}
     `)
-    .setFooter({text: `Source: ${artist}`});
+    .setFooter({text: `소스: ${artist}`});
 
   if (thumbnailUrl) {
     message.setThumbnail(thumbnailUrl);
@@ -80,14 +80,14 @@ export const buildQueueEmbed = (player: Player, page: number): EmbedBuilder => {
   const currentlyPlaying = player.getCurrent();
 
   if (!currentlyPlaying) {
-    throw new Error('queue is empty');
+    throw new Error('대기열이 비어있어요.');
   }
 
   const queueSize = player.queueSize();
   const maxQueuePage = Math.ceil((queueSize + 1) / PAGE_SIZE);
 
   if (page > maxQueuePage) {
-    throw new Error('the queue isn\'t that big');
+    throw new Error('대기열이 그렇게 많지 않아요.');
   }
 
   const queuePageBegin = (page - 1) * PAGE_SIZE;
@@ -110,22 +110,22 @@ export const buildQueueEmbed = (player: Player, page: number): EmbedBuilder => {
   const message = new EmbedBuilder();
 
   let description = `**${getSongTitle(currentlyPlaying)}**\n`;
-  description += `Requested by: <@${requestedBy}>\n\n`;
+  description += `요청한 사람: <@${requestedBy}>\n\n`;
   description += `${getPlayerUI(player)}\n\n`;
 
   if (player.getQueue().length > 0) {
-    description += '**Up next:**\n';
+    description += '**다음 곡:**\n';
     description += queuedSongs;
   }
 
   message
-    .setTitle(player.status === STATUS.PLAYING ? `Now Playing ${player.loopCurrentSong ? '(loop on)' : ''}` : 'Queued songs')
+    .setTitle(player.status === STATUS.PLAYING ? `현재 재생 중 ${player.loopCurrentSong ? '(반복 켜짐)' : ''}` : '대기 중인 곡')
     .setColor(player.status === STATUS.PLAYING ? 'DarkGreen' : 'NotQuiteBlack')
     .setDescription(description)
-    .addFields([{name: 'In queue', value: getQueueInfo(player), inline: true}, {
-      name: 'Total length', value: `${totalLength > 0 ? prettyTime(totalLength) : '-'}`, inline: true,
-    }, {name: 'Page', value: `${page} out of ${maxQueuePage}`, inline: true}])
-    .setFooter({text: `Source: ${artist} ${playlistTitle}`});
+    .addFields([{name: '대기열', value: getQueueInfo(player), inline: true}, {
+      name: '총 길이', value: `${totalLength > 0 ? prettyTime(totalLength) : '-'}`, inline: true,
+    }, {name: '페이지', value: `${maxQueuePage} 중 ${page}`, inline: true}])
+    .setFooter({text: `소스: ${artist} ${playlistTitle}`});
 
   if (thumbnailUrl) {
     message.setThumbnail(thumbnailUrl);

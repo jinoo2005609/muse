@@ -8,33 +8,33 @@ import Command from './index.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('config')
-    .setDescription('configure bot settings')
+    .setDescription('봇을 설정합니다.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild.toString())
     .addSubcommand(subcommand => subcommand
       .setName('set-playlist-limit')
-      .setDescription('set the maximum number of tracks that can be added from a playlist')
+      .setDescription('재생목록에서 추가할 수 있는 최대 곡 수를 설정합니다.')
       .addIntegerOption(option => option
         .setName('limit')
-        .setDescription('maximum number of tracks')
+        .setDescription('최대 곡 수')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('set-wait-after-queue-empties')
-      .setDescription('set the time to wait before leaving the voice channel when queue empties')
+      .setDescription('대기열이 비어 있을 때 언제 음성 채널을 떠날지 설정합니다.')
       .addIntegerOption(option => option
         .setName('delay')
-        .setDescription('delay in seconds (set to 0 to never leave)')
+        .setDescription('딜레이할 시간, 단위는 초 (0으로 설정하면 떠나지 않습니다)')
         .setRequired(true)
         .setMinValue(0)))
     .addSubcommand(subcommand => subcommand
       .setName('set-leave-if-no-listeners')
-      .setDescription('set whether to leave when all other participants leave')
+      .setDescription('다른 사람들이 모두 떠날 때 봇도 떠날지 설정합니다.')
       .addBooleanOption(option => option
         .setName('value')
-        .setDescription('whether to leave when everyone else leaves')
+        .setDescription('다른 사람이 떠날 때 봇도 떠날지')
         .setRequired(true)))
     .addSubcommand(subcommand => subcommand
       .setName('get')
-      .setDescription('show all settings'));
+      .setDescription('모든 설정을 보여줍니다.'));
 
   async execute(interaction: ChatInputCommandInteraction) {
     switch (interaction.options.getSubcommand()) {
@@ -42,7 +42,7 @@ export default class implements Command {
         const limit: number = interaction.options.getInteger('limit')!;
 
         if (limit < 1) {
-          throw new Error('invalid limit');
+          throw new Error('잘못된 제한');
         }
 
         await prisma.setting.update({
@@ -54,7 +54,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 limit updated');
+        await interaction.reply('👍 제한이 변경되었어요.');
 
         break;
       }
@@ -71,7 +71,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 wait delay updated');
+        await interaction.reply('👍 딜레이 시간이 변경되었어요.');
 
         break;
       }
@@ -88,26 +88,26 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 leave setting updated');
+        await interaction.reply('👍 설정이 변경되었어요.');
 
         break;
       }
 
       case 'get': {
-        const embed = new EmbedBuilder().setTitle('Config');
+        const embed = new EmbedBuilder().setTitle('설정');
 
         const config = await prisma.setting.findUnique({where: {guildId: interaction.guild!.id}});
 
         if (!config) {
-          throw new Error('no config found');
+          throw new Error('설정을 찾을 수 없어요.');
         }
 
         const settingsToShow = {
-          'Playlist Limit': config.playlistLimit,
-          'Wait before leaving after queue empty': config.secondsToWaitAfterQueueEmpties === 0
-            ? 'never leave'
+          '재생목록 제한': config.playlistLimit,
+          '대기열이 비었을 때 떠나기까지 기다릴 시간': config.secondsToWaitAfterQueueEmpties === 0
+            ? '떠나지 않음'
             : `${config.secondsToWaitAfterQueueEmpties}s`,
-          'Leave if there are no listeners': config.leaveIfNoListeners ? 'yes' : 'no',
+          '사람이 없을 때 떠날지 말지': config.leaveIfNoListeners ? 'yes' : 'no',
         };
 
         let description = '';
@@ -123,7 +123,7 @@ export default class implements Command {
       }
 
       default:
-        throw new Error('unknown subcommand');
+        throw new Error('알 수 없는 명령어');
     }
   }
 }

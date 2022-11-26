@@ -11,10 +11,10 @@ import durationStringToSeconds from '../utils/duration-string-to-seconds.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('seek')
-    .setDescription('seek to a position from beginning of song')
+    .setDescription('곡의 시작 부분에서부터 위치를 탐색합니다.')
     .addStringOption(option =>
       option.setName('time')
-        .setDescription('an interval expression or number of seconds (1m, 30s, 100)')
+        .setDescription('간격 표현식 또는 시간(초 단위) (1m, 30s, 100)')
         .setRequired(true),
     );
 
@@ -32,11 +32,11 @@ export default class implements Command {
     const currentSong = player.getCurrent();
 
     if (!currentSong) {
-      throw new Error('nothing is playing');
+      throw new Error('아무것도 재생 중이지 않아요.');
     }
 
     if (currentSong.isLive) {
-      throw new Error('can\'t seek in a livestream');
+      throw new Error('라이브 스트림은 탐색할 수 없어요.');
     }
 
     const time = interaction.options.getString('time')!;
@@ -50,7 +50,7 @@ export default class implements Command {
     }
 
     if (seekTime > currentSong.length) {
-      throw new Error('can\'t seek past the end of the song');
+      throw new Error('곡의 끝부분을 지나서 탐색할 수는 없어요.');
     }
 
     await Promise.all([
@@ -58,6 +58,6 @@ export default class implements Command {
       interaction.deferReply(),
     ]);
 
-    await interaction.editReply(`👍 seeked to ${prettyTime(player.getPosition())}`);
+    await interaction.editReply(`👍 ${prettyTime(player.getPosition())}로 이동했어요.`);
   }
 }

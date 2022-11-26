@@ -37,7 +37,7 @@ export default class AddQueryToQueue {
     const settings = await prisma.setting.findUnique({where: {guildId}});
 
     if (!settings) {
-      throw new Error('Could not find settings for guild');
+      throw new Error('이 길드의 설정을 찾을 수 없어요. 봇을 추방하고 다시 초대하면 해결될 수 있어요.');
     }
 
     const {playlistLimit} = settings;
@@ -70,7 +70,7 @@ export default class AddQueryToQueue {
           if (songs) {
             newSongs.push(...songs);
           } else {
-            throw new Error('that doesn\'t exist');
+            throw new Error('존재하지 않아요.');
           }
         }
       } else if (url.protocol === 'spotify:' || url.host === 'open.spotify.com') {
@@ -86,9 +86,9 @@ export default class AddQueryToQueue {
 
         if (nSongsNotFound !== 0) {
           if (nSongsNotFound === 1) {
-            extraMsg += '1 song was not found';
+            extraMsg += '1 곡을 찾을 수 없어요.';
           } else {
-            extraMsg += `${nSongsNotFound.toString()} songs were not found`;
+            extraMsg += `${nSongsNotFound.toString()} 곡을 찾을 수 없어요.`;
           }
         }
 
@@ -99,7 +99,7 @@ export default class AddQueryToQueue {
         if (song) {
           newSongs.push(song);
         } else {
-          throw new Error('that doesn\'t exist');
+          throw new Error('존재하지 않아요.');
         }
       }
     } catch (_: unknown) {
@@ -109,12 +109,12 @@ export default class AddQueryToQueue {
       if (songs) {
         newSongs.push(...songs);
       } else {
-        throw new Error('that doesn\'t exist');
+        throw new Error('존재하지 않아요.');
       }
     }
 
     if (newSongs.length === 0) {
-      throw new Error('no songs found');
+      throw new Error('곡을 찾을 수 없어요.');
     }
 
     if (shuffleAdditions) {
@@ -140,7 +140,7 @@ export default class AddQueryToQueue {
       await player.play();
 
       if (wasPlayingSong) {
-        statusMsg = 'resuming playback';
+        statusMsg = '다시 재생을 시작합니다.';
       }
 
       await interaction.editReply({
@@ -165,9 +165,9 @@ export default class AddQueryToQueue {
     }
 
     if (newSongs.length === 1) {
-      await interaction.editReply(`u betcha, **${firstSong.title}** added to the${addToFrontOfQueue ? ' front of the' : ''} queue${extraMsg}`);
+      await interaction.editReply(`Sheesh, **${firstSong.title}**을(를) 대기열${addToFrontOfQueue ? '의 맨 앞에' : '에'} 추가했어요.${extraMsg}`);
     } else {
-      await interaction.editReply(`u betcha, **${firstSong.title}** and ${newSongs.length - 1} other songs were added to the queue${extraMsg}`);
+      await interaction.editReply(`Sheesh, **${firstSong.title}**와(과) ${newSongs.length - 1} 외의 곡들이 대기열에 추가되었어요.${extraMsg}`);
     }
   }
 }

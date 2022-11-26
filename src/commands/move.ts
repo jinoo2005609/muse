@@ -9,15 +9,15 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('move')
-    .setDescription('move songs within the queue')
+    .setDescription('대기열 내에서 곡을 이동합니다.')
     .addIntegerOption(option =>
       option.setName('from')
-        .setDescription('position of the song to move')
+        .setDescription('이동할 곡의 현재 위치')
         .setRequired(true),
     )
     .addIntegerOption(option =>
       option.setName('to')
-        .setDescription('position to move the song to')
+        .setDescription('곡을 이동할 위치')
         .setRequired(true));
 
   private readonly playerManager: PlayerManager;
@@ -33,15 +33,15 @@ export default class implements Command {
     const to = interaction.options.getInteger('to') ?? 1;
 
     if (from < 1) {
-      throw new Error('position must be at least 1');
+      throw new Error('위치는 적어도 1 이어야 해요.');
     }
 
     if (to < 1) {
-      throw new Error('position must be at least 1');
+      throw new Error('위치는 적어도 1 이어야 해요.');
     }
 
     const {title} = player.move(from, to);
 
-    await interaction.reply('moved **' + title + '** to position **' + String(to) + '**');
+    await interaction.reply('**' + title + '**을(를) **' + String(to) + '**로 이동했어요.');
   }
 }

@@ -9,7 +9,7 @@ import Command from '.';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('disconnect')
-    .setDescription('pause and disconnect Muse');
+    .setDescription('일시 정지하고 떠납니다.');
 
   public requiresVC = true;
 
@@ -23,11 +23,11 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (!player.voiceConnection) {
-      throw new Error('not connected');
+      throw new Error('들어가있지 않아요.');
     }
 
     player.disconnect();
 
-    await interaction.reply('u betcha');
+    await interaction.reply('Sheesh');
   }
 }

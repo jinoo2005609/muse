@@ -67,13 +67,13 @@ export default class {
           }
 
           if (!interaction.guild) {
-            await interaction.reply(errorMsg('you can\'t use this bot in a DM'));
+            await interaction.reply(errorMsg('DM에서는 이 봇을 사용할 수 없어요.'));
             return;
           }
 
           const requiresVC = command.requiresVC instanceof Function ? command.requiresVC(interaction) : command.requiresVC;
           if (requiresVC && interaction.member && !isUserInVoice(interaction.guild, interaction.member.user as User)) {
-            await interaction.reply({content: errorMsg('gotta be in a voice channel'), ephemeral: true});
+            await interaction.reply({content: errorMsg('음성 채널에 들어가 있어야 해요.'), ephemeral: true});
             return;
           }
 
@@ -115,7 +115,7 @@ export default class {
       }
     });
 
-    const spinner = ora('📡 connecting to Discord...').start();
+    const spinner = ora('📡 Discord에 연결하는 중...').start();
 
     this.client.once('ready', async () => {
       debug(generateDependencyReport());
@@ -123,13 +123,13 @@ export default class {
       // Update commands
       const rest = new REST({version: '10'}).setToken(this.config.DISCORD_TOKEN);
       if (this.shouldRegisterCommandsOnBot) {
-        spinner.text = '📡 updating commands on bot...';
+        spinner.text = '📡 봇 명령어를 업데이트하는 중...';
         await rest.put(
           Routes.applicationCommands(this.client.user!.id),
           {body: this.commandsByName.map(command => command.slashCommand.toJSON())},
         );
       } else {
-        spinner.text = '📡 updating commands in all guilds...';
+        spinner.text = '📡 모든 길드에서 명령어를 업데이트하는 중...';
 
         await Promise.all([
           ...this.client.guilds.cache.map(async guild => {
@@ -157,7 +157,7 @@ export default class {
         status: this.config.BOT_STATUS,
       });
 
-      spinner.succeed(`Ready! Invite the bot with https://discordapp.com/oauth2/authorize?client_id=${this.client.user?.id ?? ''}&scope=bot%20applications.commands&permissions=36700160`);
+      spinner.succeed(`준비되었어요! 다음 링크를 통해 봇을 초대하세요. https://discordapp.com/oauth2/authorize?client_id=${this.client.user?.id ?? ''}&scope=bot%20applications.commands&permissions=36700160`);
     });
 
     this.client.on('error', console.error);

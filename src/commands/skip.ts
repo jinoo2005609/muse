@@ -10,10 +10,10 @@ import {buildPlayingMessageEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('skip')
-    .setDescription('skip the next songs')
+    .setDescription('다음 곡을 건너뜁니다.')
     .addIntegerOption(option => option
       .setName('number')
-      .setDescription('number of songs to skip [default: 1]')
+      .setDescription('건너뛸 곡의 수 [기본값: 1]')
       .setRequired(false));
 
   public requiresVC = true;
@@ -28,7 +28,7 @@ export default class implements Command {
     const numToSkip = interaction.options.getInteger('number') ?? 1;
 
     if (numToSkip < 1) {
-      throw new Error('invalid number of songs to skip');
+      throw new Error('건너뛸 곡의 수가 잘못되었어요.');
     }
 
     const player = this.playerManager.get(interaction.guild!.id);
@@ -36,11 +36,11 @@ export default class implements Command {
     try {
       await player.forward(numToSkip);
       await interaction.reply({
-        content: 'keep \'er movin\'',
+        content: '건너뛰었어요.',
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
       });
     } catch (_: unknown) {
-      throw new Error('no song to skip to');
+      throw new Error('건너뛸 곡이 없어요.');
     }
   }
 }

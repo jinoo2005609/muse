@@ -9,7 +9,7 @@ import Command from '.';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('clear')
-    .setDescription('clears all songs in queue except currently playing song');
+    .setDescription('현재 재생 중인 곡을 제외하고 대기열을 비웁니다.');
 
   public requiresVC = true;
 
@@ -22,6 +22,6 @@ export default class implements Command {
   public async execute(interaction: ChatInputCommandInteraction) {
     this.playerManager.get(interaction.guild!.id).clear();
 
-    await interaction.reply('clearer than a field after a fresh harvest');
+    await interaction.reply('대기열을 모두 비웠어요.');
   }
 }

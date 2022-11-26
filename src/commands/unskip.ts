@@ -10,7 +10,7 @@ import {buildPlayingMessageEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('unskip')
-    .setDescription('go back in the queue by one song');
+    .setDescription('대기열을 한 곡씩 되돌아갑니다.');
 
   public requiresVC = true;
 
@@ -26,11 +26,11 @@ export default class implements Command {
     try {
       await player.back();
       await interaction.reply({
-        content: 'back \'er up\'',
+        content: '되돌아갔어요.',
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
       });
     } catch (_: unknown) {
-      throw new Error('no song to go back to');
+      throw new Error('되돌아갈 곡이 없어요.');
     }
   }
 }

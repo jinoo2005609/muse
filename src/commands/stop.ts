@@ -10,7 +10,7 @@ import Command from '.';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('stop')
-    .setDescription('stop playback, disconnect, and clear all songs in the queue');
+    .setDescription('재생을 멈추고, 떠나고, 대기열을 비웁니다.');
 
   public requiresVC = true;
 
@@ -24,14 +24,14 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (!player.voiceConnection) {
-      throw new Error('not connected');
+      throw new Error('들어가있지 않아요.');
     }
 
     if (player.status !== STATUS.PLAYING) {
-      throw new Error('not currently playing');
+      throw new Error('아무것도 재생 중이지 않아요.');
     }
 
     player.stop();
-    await interaction.reply('u betcha');
+    await interaction.reply('Sheesh');
   }
 }

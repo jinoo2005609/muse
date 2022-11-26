@@ -10,10 +10,10 @@ import {buildQueueEmbed} from '../utils/build-embed.js';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('show the current queue')
+    .setDescription('현재 대기열을 보여줍니다.')
     .addIntegerOption(option => option
       .setName('page')
-      .setDescription('page of queue to show [default: 1]')
+      .setDescription('대기열의 페이지 [기본값: 1]')
       .setRequired(false));
 
   private readonly playerManager: PlayerManager;

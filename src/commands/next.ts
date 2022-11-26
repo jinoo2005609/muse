@@ -6,5 +6,5 @@ import {SlashCommandBuilder} from '@discordjs/builders';
 export default class extends Skip {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('next')
-    .setDescription('skip to the next song');
+    .setDescription('다음 곡으로 건너뜁니다.');
 }

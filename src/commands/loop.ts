@@ -10,7 +10,7 @@ import {STATUS} from '../services/player';
 export default class implements Command {
   public readonly slashCommand = new SlashCommandBuilder()
     .setName('loop')
-    .setDescription('toggle looping the current song');
+    .setDescription('현재 곡의 반복을 토글합니다.');
 
   public requiresVC = true;
 
@@ -24,11 +24,11 @@ export default class implements Command {
     const player = this.playerManager.get(interaction.guild!.id);
 
     if (player.status === STATUS.IDLE) {
-      throw new Error('no song to loop!');
+      throw new Error('반복할 곡이 없어요.');
     }
 
     player.loopCurrentSong = !player.loopCurrentSong;
 
-    await interaction.reply((player.loopCurrentSong ? 'looped :)' : 'stopped looping :('));
+    await interaction.reply((player.loopCurrentSong ? '반복할게요. :)' : '반복을 멈출게요. :('));
   }
 }

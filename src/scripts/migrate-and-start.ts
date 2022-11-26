@@ -47,7 +47,7 @@ const hasDatabaseBeenMigratedToPrisma = async () => {
   // Banner
   logBanner();
 
-  const spinner = ora('Applying database migrations...').start();
+  const spinner = ora('데이터베이스 마이그레이션을 적용하는 중...').start();
 
   if (await doesUserHaveExistingDatabase()) {
     if (!(await hasDatabaseBeenMigratedToPrisma())) {
@@ -55,7 +55,7 @@ const hasDatabaseBeenMigratedToPrisma = async () => {
         await migrateFromSequelizeToPrisma();
       } catch (error) {
         if ((error as ExecaError).stderr) {
-          spinner.fail('Failed to apply database migrations (going from Sequelize to Prisma):');
+          spinner.fail('데이터베이스 마이그레이션을 적용하는데 실패했습니다. (going from Sequelize to Prisma):');
           console.error((error as ExecaError).stderr);
           process.exit(1);
         } else {
@@ -69,7 +69,7 @@ const hasDatabaseBeenMigratedToPrisma = async () => {
     await execa('prisma', ['migrate', 'deploy'], {preferLocal: true});
   } catch (error: unknown) {
     if ((error as ExecaError).stderr) {
-      spinner.fail('Failed to apply database migrations:');
+      spinner.fail('데이터베이스 마이그레이션을 적용하는데 실패했습니다.:');
       console.error((error as ExecaError).stderr);
       process.exit(1);
     } else {
@@ -77,7 +77,7 @@ const hasDatabaseBeenMigratedToPrisma = async () => {
     }
   }
 
-  spinner.succeed('Database migrations applied.');
+  spinner.succeed('데이터베이스 마이그레이션이 적용되었습니다.');
 
   await startBot();
 })();

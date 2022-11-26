@@ -105,17 +105,17 @@ export default class {
     this.status = STATUS.PAUSED;
 
     if (this.voiceConnection === null) {
-      throw new Error('Not connected to a voice channel.');
+      throw new Error('음성 채널에 들어가있지 않아요.');
     }
 
     const currentSong = this.getCurrent();
 
     if (!currentSong) {
-      throw new Error('No song currently playing');
+      throw new Error('현재 재생 중인 곡이 없어요.');
     }
 
     if (positionSeconds > currentSong.length) {
-      throw new Error('Seek position is outside the range of the song.');
+      throw new Error('위치 탐색이 곡의 범위 밖이에요.');
     }
 
     let realPositionSeconds = positionSeconds;
@@ -152,13 +152,13 @@ export default class {
 
   async play(): Promise<void> {
     if (this.voiceConnection === null) {
-      throw new Error('Not connected to a voice channel.');
+      throw new Error('음성 채널에 들어가있지 않아요.');
     }
 
     const currentSong = this.getCurrent();
 
     if (!currentSong) {
-      throw new Error('Queue empty.');
+      throw new Error('대기열이 비어있어요.');
     }
 
     // Cancel any pending idle disconnection
@@ -223,7 +223,7 @@ export default class {
         const channelId = currentSong.addedInChannelId;
 
         if (channelId) {
-          debug(`${currentSong.title} is unavailable`);
+          debug(`${currentSong.title}은 이용 불가해요.`);
           return;
         }
       }
@@ -234,7 +234,7 @@ export default class {
 
   pause(): void {
     if (this.status !== STATUS.PLAYING) {
-      throw new Error('Not currently playing.');
+      throw new Error('현재 재생 중이지 않아요.');
     }
 
     this.status = STATUS.PAUSED;
@@ -259,7 +259,7 @@ export default class {
         const settings = await prisma.setting.findUnique({where: {guildId: this.guildId}});
 
         if (!settings) {
-          throw new Error('Could not find settings for guild');
+          throw new Error('이 길드의 설정을 찾을 수 없어요. 봇을 추방하고 다시 초대하면 해결될 수 있어요.');
         }
 
         const {secondsToWaitAfterQueueEmpties} = settings;
@@ -289,7 +289,7 @@ export default class {
       this.positionInSeconds = 0;
       this.stopTrackingPosition();
     } else {
-      throw new Error('No songs in queue to forward to.');
+      throw new Error('대기열에서 건너뛸 곡이 없어요.');
     }
   }
 
@@ -307,7 +307,7 @@ export default class {
         await this.play();
       }
     } else {
-      throw new Error('No songs in queue to go back to.');
+      throw new Error('대기열에서 되돌아갈 곡이 없어요.');
     }
   }
 
