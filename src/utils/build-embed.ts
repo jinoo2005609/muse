@@ -61,7 +61,7 @@ export const buildPlayingMessageEmbed = (player: Player): EmbedBuilder => {
   const message = new EmbedBuilder();
   message
     .setColor(player.status === STATUS.PLAYING ? 'DarkGreen' : 'DarkRed')
-    .setTitle(player.status === STATUS.PLAYING ? 'Now Playing' : 'Paused')
+    .setTitle(player.status === STATUS.PLAYING ? '현재 재생 중' : '일시 정지됨')
     .setDescription(`
       **${getSongTitle(currentlyPlaying)}**
       요청한 사람: <@${requestedBy}>\n
