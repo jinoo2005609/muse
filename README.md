@@ -1,8 +1,8 @@
 <p align="center">
-  <img width="250" height="250" src="https://raw.githubusercontent.com/codetheweb/muse/master/.github/logo.png">
+  <img width="250" height="250" src="https://raw.githubusercontent.com/jinoo2005609/muse/master/.github/logo.png">
 </p>
 
-🚨: v1.0.0 was a breaking change. Please take a look at the [release notes](https://github.com/codetheweb/muse/releases/tag/v1.0.0) for upgrade instructions
+🚨: v1.0.0 was a breaking change. Please take a look at the [release notes](https://github.com/jinoo2005609/muse/releases/tag/v1.0.0) for upgrade instructions
 
 ------
 
@@ -38,7 +38,7 @@ A 64-bit OS is required to run Muse.
 
 The `master` branch acts as the developing / bleeding edge branch and is not guaranteed to be stable.
 
-When running a production instance, I recommend that you use the [latest release](https://github.com/codetheweb/muse/releases/).
+When running a production instance, I recommend that you use the [latest release](https://github.com/jinoo2005609/muse/releases/).
 
 
 ### 🐳 Docker
@@ -81,7 +81,7 @@ services:
 * Node.js (16.x is recommended because it's the current LTS version)
 * ffmpeg (4.1 or later)
 
-1. `git clone https://github.com/codetheweb/muse.git && cd muse`
+1. `git clone https://github.com/jinoo2005609/muse.git && cd muse`
 2. Copy `.env.example` to `.env` and populate with values
 3. I recommend checking out a tagged release with `git checkout v[latest release]`
 4. `yarn install` (or `npm i`)
