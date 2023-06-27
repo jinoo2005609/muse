@@ -3,6 +3,7 @@ import {ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits} from 'di
 import {injectable} from 'inversify';
 import {prisma} from '../utils/db.js';
 import Command from './index.js';
+import {getGuildSettings} from '../utils/get-guild-settings';
 
 @injectable()
 export default class implements Command {
@@ -96,11 +97,7 @@ export default class implements Command {
       case 'get': {
         const embed = new EmbedBuilder().setTitle('설정');
 
-        const config = await prisma.setting.findUnique({where: {guildId: interaction.guild!.id}});
-
-        if (!config) {
-          throw new Error('설정을 찾을 수 없어요.');
-        }
+        const config = await getGuildSettings(interaction.guild!.id);
 
         const settingsToShow = {
           '재생목록 제한': config.playlistLimit,
